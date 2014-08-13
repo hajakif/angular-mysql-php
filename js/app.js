@@ -32,6 +32,12 @@ app.controller('listCtrl', function ($scope, services) {
 				c.o_orderDates = c.o_orderDates.split(",");
 				c.o_requiredDates = c.o_requiredDates.split(",");	
 				c.o_shippedDates = c.o_shippedDates.split(",");
+				if (c.o_statuses.indexOf("Cancelled") != -1) {
+					c.warning = true;
+					c.messages = [];
+					c.messages.push("This client has cancelled past orders.")
+				}
+				else c.warning = false;
 				c.o_statuses = c.o_statuses.split(",");		
 			}
 		}
