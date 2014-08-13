@@ -22,16 +22,39 @@ var ModalController = function ($scope, $modal, $log) {
 	};
 };
 
-var ModalInstanceController = function ($scope, $modalInstance, items, client) {
+var ModalInstanceController = function ($scope, $modalInstance, client) {
 	$scope.client = client;
-	$scope.items = items;
-	$scope.selected = {
-		item: $scope.items[0]
-	};
 	$scope.ok = function () {
-		$modalInstance.close($scope.selected.item);
+		$modalInstance.close();
 	};
 	$scope.cancel = function () {
 		$modalInstance.dismiss('cancel');
 	};
+};
+
+app.controller('loginModalController', function ($scope, $modal) {
+	$scope.open = function (client) {
+		var modalInstance = $modal.open({
+			templateUrl: 'loginModal.html',
+			controller: loginModalInstanceController,
+			size: "sm",
+			resolve: {
+				client: function () {
+					return client;
+				}
+			}
+		});
+	};
+});
+
+var loginModalInstanceController = function ($scope, $modalInstance) {
+	$scope.ok = function () {
+		$modalInstance.close();
+	};
+	$scope.cancel = function () {
+		$modalInstance.dismiss('cancel');
+	};
+	$scope.login = function (credentials) {
+		console.log($scope);
+	}
 };

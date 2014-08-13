@@ -4,7 +4,7 @@
 		input(type="search" ng-model="q.$" value="" placeholder="start typing..." ng-style="q.$ && {'margin-top': '3%'} || !q.$ && {'margin-top': '25%'}" autofocus).search.form-control
 		.row.center.shrunk(ng-show="q.$")
 			label Show&nbsp;
-			select.form-control.tenth.center(ng-model="quantity" tooltip="The number of results you want to show at once." tooltip-placement="right")
+			select.form-control.tenth.center(ng-model="quantity")
 					option 5
 					option 10
 					option 25
@@ -121,7 +121,6 @@
 															td.success(ng-if="client.o_statuses[$index] == 'Shipped'") {{client.o_statuses[$index]}}
 															td.danger(ng-if="client.o_statuses[$index] == 'Cancelled'") {{client.o_statuses[$index]}}
 															td.warning(ng-if="client.o_statuses[$index] != 'Cancelled' && client.o_statuses[$index] != 'Shipped'") {{client.o_statuses[$index]}}
-									.modal-footer
 									.modal-footer
 										button.btn.btn-primary(ng-click="ok()") OK
 

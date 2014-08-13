@@ -35,6 +35,20 @@
 			$this->mysqli = new mysqli(self::DB_SERVER, self::DB_USER, self::DB_PASSWORD, self::DB);
 		}
 
+		private function login(){
+			if($this->get_request_method() != "GET") $this->response('',406);
+			$query = "SELECT u.* FROM users u";
+			$r = $this->mysqli->query($query) or die($this->mysqli->error.__LINE__);
+			if($r->num_rows > 0){
+				$result = array();
+				while($row = $r->fetch_assoc()){
+					$result[] = $row;
+				}
+				$this->response($this->jsonify($result), 200);
+			}
+			$this->response('',204);
+		}
+
 		private function getClients(){	
 			if($this->get_request_method() != "GET") $this->response('',406);
 			$query =

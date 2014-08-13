@@ -11,6 +11,9 @@ app.factory("services", ['$http', function($http) {
 	obj.getClients = function(){
 		return $http.get(serviceBase + 'getClients');
 	}
+	obj.login = function(){
+		return $http.get(serviceBase + "login");
+	}
 	return obj;	 
 }]);
 
@@ -36,14 +39,23 @@ app.controller('listCtrl', function ($scope, services) {
 	});
 });
 
+app.controller("loginCtrl", function ($scope, services) {
+	services.login().then(function(data){
+		$scope.users = data.data;
+	});
+});
+
 
 app.config(['$routeProvider',
 	function($routeProvider) {
 	$routeProvider.
 		when('/', {
-			title: 'Clients',
 			templateUrl: 'partials/search.php',
 			controller: 'listCtrl'
+		}).
+		when('/login', {
+			templateUrl: 'partials/login.php',
+			controller: 'loginCtrl'
 		})
 		.otherwise({
 			redirectTo: '/'
