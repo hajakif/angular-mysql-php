@@ -1,0 +1,131 @@
+.search-container
+	.search-container-inner
+		h1(ng-if="q.$") #[i.glyphicon.glyphicon-search] &nbsp;customers
+		input(type="search" ng-model="q.$" value="" placeholder="start typing..." ng-style="q.$ && {'margin-top': '3%'} || !q.$ && {'margin-top': '25%'}" autofocus).search.form-control
+		.row.center.shrunk(ng-show="q.$")
+			label Show&nbsp;
+			select.form-control.tenth.center(ng-model="quantity" tooltip="The number of results you want to show at once." tooltip-placement="right")
+					option 5
+					option 10
+					option 25
+					option(selected="selected") 50
+					option 75
+					option 100
+					option 150
+					option 200
+					option 300
+					option 400
+					option 500
+					option 1000
+		.row
+			table.table.table-hover.table-condensed.three-fourths.center(ng-if="q.$")
+				thead
+					tr
+						th #
+						th Customer Name
+						th Contact
+						th Address
+						th City
+						th State
+						th Code
+						th Country
+						th
+				tbody
+					tr(ng-repeat="client in clients | filter:q:strict | limitTo:quantity" popover="Assigned to the {{client.o_city || 'Boston'}} office." popover-popup-delay="1000" popover-trigger="mouseenter")
+						td.success(ng-if="client.customerNumber.toLowerCase().indexOf(q.$.toLowerCase()) != -1") {{client.customerNumber}}
+						td(ng-if="client.customerNumber.toLowerCase().indexOf(q.$.toLowerCase()) == -1") {{client.customerNumber}}
+						td(ng-if="!client.customerNumber")
+						td.success(ng-if="client.customerName.toLowerCase().indexOf(q.$.toLowerCase()) != -1") {{client.customerName}}
+						td(ng-if="client.customerName.toLowerCase().indexOf(q.$.toLowerCase()) == -1") {{client.customerName}}
+						td.success(ng-if="client.contactLastName.toLowerCase().indexOf(q.$.toLowerCase()) != -1 || client.contactFirstName.toLowerCase().indexOf(q.$.toLowerCase()) != -1")
+							span(ng-if="client.contactLastName && client.contactFirstName") {{client.contactLastName}},&nbsp;
+							span(ng-if="client.contactLastName && !client.contactFirstName") {{client.contactLastName}}
+							span(ng-if="client.contactFirstName") {{client.contactFirstName}}
+						td(ng-if="client.contactLastName.toLowerCase().indexOf(q.$.toLowerCase()) == -1 && client.contactFirstName.toLowerCase().indexOf(q.$.toLowerCase()) == -1")
+							span(ng-if="client.contactLastName && client.contactFirstName") {{client.contactLastName}},&nbsp;
+							span(ng-if="client.contactLastName && !client.contactFirstName") {{client.contactLastName}}
+							span(ng-if="client.contactFirstName") {{client.contactFirstName}}
+						td.success(ng-if="client.addressLine1.toLowerCase().indexOf(q.$.toLowerCase()) != -1 || client.addressLine2.toLowerCase().indexOf(q.$.toLowerCase()) != -1") 
+							p {{client.addressLine1}}
+							p(ng-if="client.addressLine2") {{client.addressLine2}}
+						td(ng-if="client.addressLine1.toLowerCase().indexOf(q.$.toLowerCase()) == -1 && client.addressLine2.toLowerCase().indexOf(q.$.toLowerCase()) == -1") 
+							p {{client.addressLine1}}
+							p(ng-if="client.addressLine2") {{client.addressLine2}}
+						td.success(ng-if="client.city.toLowerCase().indexOf(q.$.toLowerCase()) != -1") {{client.city}}
+						td(ng-if="client.city.toLowerCase().indexOf(q.$.toLowerCase()) == -1") {{client.city}}
+						td.success(ng-if="client.state.toLowerCase().indexOf(q.$.toLowerCase()) != -1") {{client.state}}
+						td(ng-if="client.state.toLowerCase().indexOf(q.$.toLowerCase()) == -1") {{client.state}}
+						td.success(ng-if="client.postalCode.toLowerCase().indexOf(q.$.toLowerCase()) != -1") {{client.postalCode}}
+						td(ng-if="client.postalCode.toLowerCase().indexOf(q.$.toLowerCase()) == -1") {{client.postalCode}}
+						td.success(ng-if="client.country.toLowerCase().indexOf(q.$.toLowerCase()) != -1") {{client.country}}
+						td(ng-if="client.country.toLowerCase().indexOf(q.$.toLowerCase()) == -1") {{client.country}}
+						td
+							div(ng-controller="ModalController")
+								button.btn.btn-primary(ng-click="open(client)" ng-if="client.creditLimit > 0" tooltip="Click for detailed information about {{client.customerName}}'s account." tooltip-placement="left") View
+								button.btn.btn-warning(ng-click="open(client)" ng-if="client.creditLimit == 0" popover="This account has outsanding issues." popover-placement="bottom" popover-trigger="mouseenter") View
+								script(type="text/ng-template" id="myModalContent.html")
+									.modal-header
+										h2 #[i.glyphicon.glyphicon-th] {{client.customerName}}
+									.modal-body
+										.row
+											.col-md-2(ng-if="client.creditLimit > 0") #[i.glyphicon.glyphicon-usd] Credit Limit
+											.col-md-2.bg-danger(ng-if="client.creditLimit == 0"): em #[i.glyphicon.glyphicon-warning-sign] Credit Limit
+											.col-md-2(ng-if="client.creditLimit > 0") ${{client.creditLimit}}
+											.col-md-10.bg-danger(ng-if="client.creditLimit == 0" popover="This client has no credit!" popover-placement="left" popover-title="Warning" popover-trigger="mouseenter"): em ${{client.creditLimit}}
+										.row
+											.col-md-2 #[i.glyphicon.glyphicon-briefcase] Sales Rep.
+											.col-md-10(ng-if="client.salesRepEmployeeNumber")
+												.row
+													.col-md-12 {{client.em_firstName}} {{client.em_lastName}} (&#35;{{client.salesRepEmployeeNumber}}) #[i.glyphicon.glyphicon-envelope] #[a(href="mailto:{{client.em_email}}") {{client.em_email}}]
+											.col-md-10(ng-if="!client.salesRepEmployeeNumber") No representative assigned.
+										.row
+											.col-md-2 #[i.glyphicon.glyphicon-user] Contact
+											.col-md-10 {{client.contactFirstName}} {{client.contactLastName}}
+										.row
+											.col-md-2 #[i.glyphicon.glyphicon-phone] Phone
+											.col-md-10 {{client.phone}}&nbsp;
+												span(ng-if="client.country") ({{client.country}})
+										hr
+										tabset
+											tab(heading="Payment History")
+												h4.center.no-padding #[i.glyphicon.glyphicon-list] Payment History
+												table.table.table-striped.table-hover.table-condensed.center.three-fourths
+													thead
+														tr
+															th Check #
+															th Date
+															th Amount
+													tbody
+														tr(ng-repeat="payment in client.p_checks track by $index")
+															td {{client.p_checks[$index]}}
+															td {{client.p_dates[$index]}}
+															td.success(ng-if="client.p_amounts[$index] > 50000") ${{client.p_amounts[$index]}}
+															td(ng-if="client.p_amounts[$index] > 2000 && client.p_amounts[$index] <= 50000") ${{client.p_amounts[$index]}}
+															td.danger(ng-if="client.p_amounts[$index] < 2000") ${{client.p_amounts[$index]}}
+											tab(heading="Order History")
+												h4.center.no-padding #[i.glyphicon.glyphicon-list] Order History
+												table.table.table-striped.table-hover.table-condensed.center.three-fourths
+													thead
+														tr
+															th Order #
+															th Placed On
+															th Due On
+															th Shipped On
+															th Status
+													tbody
+														tr(ng-repeat="order in client.o_orders track by $index")
+															td {{client.o_orders[$index]}}
+															td {{client.o_orderDates[$index]}}
+															td {{client.o_requiredDates[$index]}}
+															td {{client.o_shippedDates[$index] || "Not shipped."}}
+															td.success(ng-if="client.o_statuses[$index] == 'Shipped'") {{client.o_statuses[$index]}}
+															td.danger(ng-if="client.o_statuses[$index] == 'Cancelled'") {{client.o_statuses[$index]}}
+															td.warning(ng-if="client.o_statuses[$index] != 'Cancelled' && client.o_statuses[$index] != 'Shipped'") {{client.o_statuses[$index]}}
+									.modal-footer
+									.modal-footer
+										button.btn.btn-primary(ng-click="ok()") OK
+
+
+
+
+
