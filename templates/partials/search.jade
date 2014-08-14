@@ -60,7 +60,7 @@
 						td.success(ng-if="client.country.toLowerCase().indexOf(q.$.toLowerCase()) != -1") {{client.country}}
 						td(ng-if="client.country.toLowerCase().indexOf(q.$.toLowerCase()) == -1") {{client.country}}
 						td
-							div(ng-controller="ModalController")
+							div(ng-controller="clientDetailsModalController")
 								button.btn.btn-primary(ng-click="open(client)" ng-if="client.creditLimit > 0 && !client.warning" tooltip="Click for detailed information about {{client.customerName}}'s account." tooltip-placement="left") View
 								button.btn.btn-warning(ng-click="open(client)" ng-if="client.creditLimit == 0 || client.warning" popover="This account has outsanding issues." popover-placement="bottom" popover-trigger="mouseenter") View
 								script(type="text/ng-template" id="myModalContent.html")

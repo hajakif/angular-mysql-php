@@ -8,49 +8,46 @@
 
 		const DB_SERVER = "localhost";
 		const DB_USER = "root";
-		const DB_PASSWORD = "root";
+		const DB_PASSWORD = "";
 		const DB = "classicmodels";
 
 		private $db = NULL;
 		private $mysqli = NULL;
-		public function __construct(){
+		public function __construct() {
 			parent::__construct();
 			$this->dbConnect();	
 		}
 		
 		// Initialization
-		public function init(){
-			$func = strtolower(trim(str_replace("/","",$_REQUEST['x'])));
-			if((int)method_exists($this,$func) > 0)
-				$this->$func();
-			else
-				$this->response('',404);
+		public function init() {
+			$func = strtolower(trim(str_replace("/","",$_REQUEST["x"])));
+			if((int)method_exists($this,$func) > 0) $this->$func();
+			else $this->response("",404);
 		}
 
 		// Utility Functions
-		private function jsonify($data){ if(is_array($data)) return json_encode($data); }
+		private function jsonify($data) { if(is_array($data)) return json_encode($data); }
 
 		// Database Functions
-		private function dbConnect(){
-			$this->mysqli = new mysqli(self::DB_SERVER, self::DB_USER, self::DB_PASSWORD, self::DB);
-		}
-
-		private function login(){
-			if($this->get_request_method() != "GET") $this->response('',406);
-			$query = "SELECT u.* FROM users u";
+		private function dbConnect() { $this->mysqli = new mysqli(self::DB_SERVER, self::DB_USER, self::DB_PASSWORD, self::DB); }
+		private function parseQuery($query) {
 			$r = $this->mysqli->query($query) or die($this->mysqli->error.__LINE__);
 			if($r->num_rows > 0){
 				$result = array();
-				while($row = $r->fetch_assoc()){
-					$result[] = $row;
-				}
+				while($row = $r->fetch_assoc()) $result[] = $row;
 				$this->response($this->jsonify($result), 200);
 			}
-			$this->response('',204);
+			$this->response("",204);
 		}
 
-		private function getClients(){	
-			if($this->get_request_method() != "GET") $this->response('',406);
+		// API Functions
+		private function login() {
+			$this->check_request_method();
+			$query = "SELECT u.* FROM users u";
+			$this->parseQuery($query);
+		}
+		private function getClients() {	
+			$this->check_request_method();
 			$query =
 				"SELECT c.*, e.employeeNumber, e.lastName AS 'em_lastName', e.firstName AS 'em_firstName', e.email AS 'em_email',
 					o.city AS 'o_city',
@@ -76,15 +73,7 @@
 						GROUP_CONCAT(o.comments) AS o_comments
 						FROM orders o GROUP BY o.customerNumber) os
 					ON os.o_customerNumber = c.customerNumber";
-			$r = $this->mysqli->query($query) or die($this->mysqli->error.__LINE__);
-			if($r->num_rows > 0){
-				$result = array();
-				while($row = $r->fetch_assoc()){
-					$result[] = $row;
-				}
-				$this->response($this->jsonify($result), 200);
-			}
-			$this->response('',204);
+			$this->parseQuery($query);
 		}
 	}
 
