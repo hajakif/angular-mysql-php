@@ -53,8 +53,9 @@
 							p(ng-if="client.addressLine2") {{client.addressLine2}}
 						td.success(ng-if="client.city.toLowerCase().indexOf(q.$.toLowerCase()) != -1") {{client.city}}
 						td(ng-if="client.city.toLowerCase().indexOf(q.$.toLowerCase()) == -1") {{client.city}}
-						td.success(ng-if="client.state.toLowerCase().indexOf(q.$.toLowerCase()) != -1") {{client.state}}
-						td(ng-if="client.state.toLowerCase().indexOf(q.$.toLowerCase()) == -1") {{client.state}}
+						td.success(ng-if="client.state && client.state.toLowerCase().indexOf(q.$.toLowerCase()) != -1") {{client.state}} suc
+						td(ng-if="client.state && client.state.toLowerCase().indexOf(q.$.toLowerCase()) == -1") {{client.state}}
+						td(ng-if="!client.state") &nbsp;
 						td.success(ng-if="client.postalCode.toLowerCase().indexOf(q.$.toLowerCase()) != -1") {{client.postalCode}}
 						td(ng-if="client.postalCode.toLowerCase().indexOf(q.$.toLowerCase()) == -1") {{client.postalCode}}
 						td.success(ng-if="client.country.toLowerCase().indexOf(q.$.toLowerCase()) != -1") {{client.country}}
