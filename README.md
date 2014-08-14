@@ -6,23 +6,23 @@ A starter project for using AngularJS with Jade and Gulp to manipulate MySQL dat
 
 ## Installation
 
-1. To install front-end dependencies, run the following command:
+To install front-end dependencies, run the following command:
 
 ```Shell
 path/to/your/installation$ bower install
 ```
 
-2. To install back-end dependencies (mainly for Gulp), run the following command:
+To install back-end dependencies (mainly for Gulp), run the following command:
 
 ```Shell
 path/to/your/installation$ sudo npm install
 ```
 
-3. Then create a MySQL database using the platform of your choice (e.g., by going to phpMyAdmin on your local or remote server) named "classicmodels."
+Then create a MySQL database using the platform of your choice (e.g., by going to phpMyAdmin on your local or remote server) named "classicmodels."
 
-4. After that, import _classicmodels.sql_ (located in the root directory of the project) into your new "classicmodels" database.
+After that, import _classicmodels.sql_ (located in the root directory of the project) into your new "classicmodels" database.
 
-5. Finally, be sure to edit accordingly the relevant database constants in _api.php_ (located in the services directory). It looks like this by default:
+Finally, be sure to edit accordingly the relevant database constants in _api.php_ (located in the services directory). It looks like this by default:
 
 ```PHP
 const DB_SERVER = "localhost";
