@@ -2,9 +2,8 @@
   "name": "angular-mysql-php",
   "description": "A starter project for an AngularJS front-end to a MySQL database using a PHP API.",
   "version": "0.0.1",
-  "homepage": "",
+  "homepage": "https://github.com/ajschlosser/angular-mysql-php/",
   "license": "MIT",
-  "private": true,
   "dependencies": {
     "angular": "1.2.x",
     "angular-route": "1.2.x",
