@@ -7,7 +7,7 @@ var app = angular.module("searchApp", [
 ]);
 
 app.factory("services", ["$http", function($http) {
-	var serviceBase = "/angulardb/services/";
+	var serviceBase = "/angular-mysql-php/services/";
 	var obj = {};
 	obj.getClients = function() {
 		return $http.get(serviceBase + "getClients");
@@ -21,6 +21,7 @@ app.factory("services", ["$http", function($http) {
 app.controller("listCtrl", function ($scope, services) {
 	services.getClients().then(function(data) {
 		$scope.clients = data.data;
+		console.log($scope.clients);
 		for (var i in $scope.clients) {
 			var c = $scope.clients[i];
 			c.messages = [];
