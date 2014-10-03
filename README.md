@@ -2,7 +2,7 @@
 
 ## Description
 
-A starter project for using AngularJS with Jade and Gulp to manipulate MySQL databases.
+A starter project for using AngularJS with Jade and Gulp to manipulate MySQL databases via a PHP RESTful API.
 
 ## Installation
 
